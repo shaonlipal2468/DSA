@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct node{
+	int data;
+	struct node *left;
+	struct node *right;
+};
+
+struct node *newnode(int data)
+{
+	struct node *newn=(struct node *)malloc(sizeof(struct node));
+	newn->left=NULL;
+	newn->right=NULL;
+	newn->data=data;
+	return newn;
+}
+vector<int> diagonal_order(struct node *root)
+{
+    //Your code here
+    unordered_map<int,vector<int>> m;
+    m[0].push_back(root->data);
+    int hd = 0;
+    queue<pair<struct node *,int>> q;
+    q.push(make_pair(root,hd));
+    while(!q.empty())
+    {
+        auto temp = q.front();
+        q.pop();
+
+        int new_hd = temp.second;
+        struct node * temp_node = temp.first;
+
+        if(temp_node->left)
+            {
+              m[new_hd-1].push_back(temp_node->left->data);
+              q.push(make_pair(temp_node->left,new_hd-1));
+            }
+
+        if(temp_node->right)
+           {
+             m[new_hd].push_back(temp_node->right->data);
+             q.push(make_pair(temp_node->right,new_hd));
+           }
+
+    }
+    vector<int> ans;
+    auto it_min = min_element(m.begin(),m.end());
+    auto it_max = max_element(m.begin(),m.end());
+
+
+    for(int i=it_max->first;i>=it_min->first;i--)
+       {
+           auto it = m.find(i);
+           for (int j=0; j<it->second.size(); ++j)
+                 ans.push_back(it->second[j]);
+       }
+
+   return ans;
+}
+
+int main(){
+	struct node *root=NULL;
+  root = newnode(8);
+  root->left = newnode(3);
+  root->right = newnode(10);
+  root->left->left = newnode(1);
+  root->right->left = newnode(6);
+  root->right->right = newnode(14);
+  root->right->left->left = newnode(4);
+  root->right->left->right = newnode(7);
+  root->right->right->left = newnode(13);
+
+	vector<int> ans = diagonal_order(root);
+	for(int i=0;i<ans.size();i++)
+	   cout<<ans[i]<<" ";
+	cout<<endl;
+}
