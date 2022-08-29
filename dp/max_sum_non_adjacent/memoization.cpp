@@ -20,6 +20,6 @@ int main()
 {
    vector<int> nums={2,1,4,9};
    int n = nums.size();
-   vector<int> dp(n+1,-1);
+   vector<int> dp(n,-1);
    cout<<maximumNonAdjacentSum(nums,n-1,dp);
 }   
